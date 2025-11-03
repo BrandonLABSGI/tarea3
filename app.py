@@ -1,13 +1,24 @@
 import streamlit as st
 from modulos.venta import mostrar_venta
+from modulos.clientes import mostrar_clientes
+from modulos.productos import mostrar_productos
 from modulos.login import login
-#from modulos.compra import mostrar_compra
-#mostrar_venta()
-#login()
-# Comprobamos si la sesión ya está iniciada
-if "sesion_iniciada" in st.session_state and st.session_state["sesion_iniciada"]:
-    # Si la sesión está iniciada, mostrar el contenido de ventas
-    mostrar_venta()
-else:
-    # Si la sesión no está iniciada, mostrar el login
+
+# Si NO hay sesión, pedir login
+if not st.session_state.get("sesion_iniciada"):
     login()
+    st.stop()  # Evita que el resto del código siga sin login
+
+# ✅ Si hay sesión, mostrar menú lateral
+opciones = ["Clientes", "Productos", "Ventas"]
+seleccion = st.sidebar.selectbox("Selecciona una opción", opciones)
+
+# ✅ Contenido según selección
+if seleccion == "Clientes":
+    mostrar_clientes()
+
+elif seleccion == "Productos":
+    mostrar_productos()
+
+elif seleccion == "Ventas":
+    mostrar_venta()
